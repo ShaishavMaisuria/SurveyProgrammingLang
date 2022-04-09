@@ -10,6 +10,8 @@ import (
 )
 
 // following code is used for structuring the object
+//https://www.digitalocean.com/community/conceptual_articles/understanding-pointers-in-go
+// issues stuck at value nnot changing
 
 type student struct {
 	firstName string
@@ -51,24 +53,39 @@ func main() {
 		fmt.Println(i, s)
 		fmt.Println(" Please enter the data for the following student id", s.id)
 		courseArray = enterCourseInformation()
+		for i, s := range studentArray {
+			fmt.Println(i)
+			var n = 2
+			var j int
+			for j = 0; j < n; j++ {
+				s.courses[j].courseName = courseArray[j].courseName
 
-		fmt.Println()
+				s.courses[j].gradeLetter = courseArray[j].gradeLetter
+				s.courses[j].studentgrades = courseArray[j].studentgrades
+				s.courses[j].instructorName = courseArray[j].instructorName
+				s.courses[j].credit = courseArray[j].credit
+
+				// fmt.Println(courseArray)
+				// print_courseDetails(courseArray[j])
+				fmt.Println("courname", s.courses[j])
+			}
+
+		}
+
+	}
+
+	// issue is not able to write a pointer so that values can be updated
+	for i, s := range studentArray {
+		fmt.Println(i)
 		var n = 2
 		var j int
 		for j = 0; j < n; j++ {
-			s.courses[j] = courseArray[j]
-			fmt.Println(courseArray)
-			print_courseDetails(courseArray[j])
+			fmt.Println("structured course name:", s.courses[i].courseName)
+			print_courseDetails(s.courses[j])
 		}
+		fmt.Println("structured course name1:", s.courses)
+
 	}
-
-	// for i, s := range studentArray {
-	// 	fmt.Println(i, s)
-	// 	fmt.Println(" Please enter the data for the following student id", s.id)
-
-	// 	print_courseDetails(s.courses[0])
-
-	// }
 
 }
 
