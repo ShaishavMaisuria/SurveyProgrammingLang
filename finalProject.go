@@ -43,58 +43,27 @@ var grades = map[string]float64{
 
 func main() {
 
+	fmt.Println("")
+	fmt.Println("")
+
+	fmt.Println("************************************Program Start*************************************")
+	fmt.Println("")
 	var fileName string
 	var studentArray []student
 	fileName = "data.txt"
 	studentArray = read_data(fileName)
-	// var courseArray [2]course
-	// for i, s := range studentArray {
-
-	// 	fmt.Println(i, s)
-	// 	fmt.Println(" Please enter the data for the following student id", s.id)
-	// 	courseArray = enterCourseInformation()
-	// 	for i, s := range studentArray {
-	// 		fmt.Println(i)
-	// 		var n = 2
-	// 		var j int
-	// 		for j = 0; j < n; j++ {
-	// 			s.courses[j].courseName = courseArray[j].courseName
-
-	// 			s.courses[j].gradeLetter = courseArray[j].gradeLetter
-	// 			s.courses[j].studentgrades = courseArray[j].studentgrades
-	// 			s.courses[j].instructorName = courseArray[j].instructorName
-	// 			s.courses[j].credit = courseArray[j].credit
-
-	// 			// fmt.Println(courseArray)
-	// 			// print_courseDetails(courseArray[j])
-	// 			fmt.Println("courname", s.courses[j])
-	// 		}
-
-	// 	}
-
-	// }
-
-	// issue is not able to write a pointer so that values can be updated
+	fmt.Println("+++++++++++++++++++++++++ Lets see All the changes made +++++++++++++++++++++++++")
 	for i, s := range studentArray {
-
-		fmt.Println("************************************Program Start*************************************")
 		fmt.Println(i)
-		// var n = 2
-		// var j int
-		// for j = 0; j < n; j++ {
-		// 	fmt.Println("structured course name:", s.courses[i].courseName)
-		// 	print_courseDetails(s.courses[j])
-		// }
 		print_StudentInformation(s)
-		// fmt.Println("structured course name1:", s.courses)
-
 	}
+	fmt.Println("************************************Program Endeed*************************************")
 
 }
 
 func enterCourseInformation() [2]course {
-	fmt.Println("********************************************************************************")
-	fmt.Println("This Program is to demonstrate the Input and output Operations in Go Language ")
+	fmt.Println("---------------------------------------------------------------")
+	fmt.Println("Please enter Course information  ")
 
 	//student object variables
 	var courseObject course
@@ -107,7 +76,7 @@ func enterCourseInformation() [2]course {
 	var i int
 
 	for i = 0; i < n; i++ {
-		fmt.Println("*****************************************")
+		fmt.Println("...........................................")
 		fmt.Println("Course" + strconv.Itoa(i+1))
 		fmt.Println("Please Enter the course Name")
 
@@ -132,15 +101,6 @@ func enterCourseInformation() [2]course {
 		courseArray[i] = courseObject
 	}
 
-	// var j int
-	// for j = 0; j < n; j++ {
-	// 	fmt.Println("-----------------------------------------------")
-
-	// 	fmt.Println("Student" + strconv.Itoa(j+1))
-	// 	print_courseDetails(courseArray[j])
-	// 	// fmt.Println()
-	// }
-
 	return courseArray
 }
 
@@ -148,13 +108,11 @@ func enterCourseInformation() [2]course {
 func findGradeLetter(cObject [2]course) float64 {
 
 	// refference change variable nameshttps://stackoverflow.com/questions/59623663/trouble-creating-gpa-calculator
-
 	totalCredits := 0.0
 	totalScore := 0.0
-
-	// var subjects int = 2
 	var grade float64
 	var credits float64
+
 	for i := 0; i < len(cObject); i++ {
 		grade = grades[strings.ToUpper(cObject[i].gradeLetter)]
 		credits = cObject[i].credit
@@ -179,20 +137,25 @@ func print_courseDetails(sObject course) {
 // in the go we declare function like below fun functionName (parameter parameter_type )
 func print_StudentInformation(sObject student) {
 	fmt.Println("------------------------Student Information-------------------------------")
-	fmt.Printf("%s %s whos 800 number is %d , and is student at College %s at the age of %d", sObject.firstName, sObject.lastName, sObject.id, sObject.college, sObject.age)
-	fmt.Print("///Course Information////")
+	fmt.Printf("%s %s whos 800 number is %s , and is student at College %s at the age of %d", sObject.firstName, sObject.lastName, sObject.id, sObject.college, sObject.age)
+	fmt.Println("")
+	fmt.Println("/// Course Information (start) ////")
 	var n = 2
 	var j int
 	for j = 0; j < n; j++ {
-		fmt.Println("structured course name:", sObject.courses[j].courseName)
+		fmt.Println("structured course name:")
 		print_courseDetails(sObject.courses[j])
 	}
+	fmt.Println("")
+	fmt.Println("/// Course Information (End) ////")
 
 }
 
 func read_data(file string) []student {
 
-	fmt.Println("This Program is to demonstrate the Input and output Operations in Go Language ")
+	const currentYear int = 2022
+
+	fmt.Println("This Program is to demonstrate the Input and output Operations in Go Language for current Year %d ", currentYear)
 	f, errorVal := os.Open(file)
 
 	if errorVal != nil {
@@ -204,33 +167,30 @@ func read_data(file string) []student {
 	scanner := bufio.NewScanner(f)
 	var str = ""
 	var arraylist []student
-	// var studentGPA float64
 	for scanner.Scan() {
 
 		str = scanner.Text()
-		// fmt.Println()
 		split := strings.Split(str, ",")
-		// fmt.Print("vale", split[0])
 
-		fmt.Println("********************************************************************************")
+		fmt.Println("*****************************New Student***************************************************")
 
+		fmt.Println("")
+		fmt.Println("")
+		fmt.Printf("Current student Name %s %s and id is %s  ", split[1], split[2], split[0])
 		courseArray := enterCourseInformation()
 		studentGPA := findGradeLetter(courseArray)
-		arraylist = append(arraylist, student{id: split[0], firstName: split[1], lastName: split[2], birthYear: split[3], college: split[4], courses: courseArray, gpa: studentGPA})
+		// string to int
+		age, err := strconv.Atoi(split[3])
+		if err != nil {
+			// handle error
+			fmt.Println(err)
+			os.Exit(2)
+		}
+		arraylist = append(arraylist, student{id: split[0], firstName: split[1], lastName: split[2], birthYear: split[3], college: split[4], courses: courseArray, gpa: studentGPA, age: age})
 	}
 
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
-	// var j int
-	// for j = 0; j < n; j++ {
-	// 	fmt.Println("-----------------------------------------------")
-
-	// 	fmt.Println("Student" + strconv.Itoa(j+1))
-	// 	print_courseDetails(courseArray[j])
-	// 	// fmt.Println()
-	// }
-
-	fmt.Print("arayList", arraylist)
 	return arraylist
 }
